@@ -1,0 +1,42 @@
+{% extends 'TenDuong/base.html' %}
+{% block content %}
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+  <h1>Kết Quả Tìm Kiếm</h1>
+    {% if streets %}
+        <table>
+            <tr>
+                <th>Street Name</th>
+                <th>Source</th>
+                <th>Street Type</th>
+                <th>Street Group</th>
+                <th>Address</th>
+            </tr>
+            {% for street in streets %}
+                <tr>
+                    <td>{{ street.street_name }}</td>
+                    <td>{{ street.source_docID.source_name }}</td>
+                    <td>{{ street.type_streetID.type_name }}</td>
+                    <td>{{ street.group_streetID.group_name }}</td>
+                    <td>{{ street.id_address.ward_name }}, {{ street.id_address.district_name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Không tìm thấy kết quả phù hợp.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'TenDuong/base.html' %}
+{% block content %}
+    <div class="container mt-4">
+        <h1>User Profile</h1>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>User Type:</strong> {{ user.usertype }}</p>
+        
+        <!-- Thêm các thông tin khác tùy theo yêu cầu -->
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'TenDuong/base.html' %}
+{% block content %}
+    <h1>DANH SÁCH TÊN ĐƯỜNG</h1>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <table>
+        <tr>
+            <th>Street Name</th>
+            <th>Abstract</th>
+            <th>Content</th>
+            <th>Source</th>
+            <th>Type</th>
+            <th>Group</th>
+            <th>Address</th>
+            <th>Position</th>
+            <th>Length</th>
+            <th>Width</th>
+            <th>Lane Number</th>
+            <th>Google Map</th>
+            <th>Note</th>
+        </tr>
+        {% for street in streets %}
+        <tr>
+            <td>{{ street.street_name }}</td>
+            <td>{{ street.abstract }}</td>
+            <td>{{ street.content }}</td>
+            <td>{{ street.source_docID.source_name }}</td>
+            <td>{{ street.type_streetID.type_name }}</td>
+            <td>{{ street.group_streetID.group_name }}</td>
+            <td>{{ street.id_address.ward_name }}, {{ street.id_address.district_name }}</td>
+            <td>{{ street.position }}</td>
+            <td>{{ street.length }}</td>
+            <td>{{ street.width }}</td>
+            <td>{{ street.lane_number }}</td>
+            <td><a href="{{ street.google_map }}" target="_blank">Google Map</a></td>
+            <td>{{ street.note }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'TenDuong/base.html' %}
+{% block content %}
+    <h1>Kết quả tìm kiếm</h1>
+    <h2>Danh sách đường</h2>
+    <ul>
+        {% for street in streets %}
+            <li>{{ street.street_name }}</li>
+        {% empty %}
+            <li>Không tìm thấy đường phù hợp</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Danh sách nguồn</h2>
+    <ul>
+        {% for source in sources %}
+            <li>{{ source.source_name }}</li>
+        {% empty %}
+            <li>Không tìm thấy nguồn phù hợp</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Danh sách loại đường</h2>
+    <ul>
+        {% for street_type in street_types %}
+            <li>{{ street_type.type_name }}</li>
+        {% empty %}
+            <li>Không tìm thấy loại đường phù hợp</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Danh sách nhóm đường</h2>
+    <ul>
+        {% for street_group in street_groups %}
+            <li>{{ street_group.group_name }}</li>
+        {% empty %}
+            <li>Không tìm thấy nhóm đường phù hợp</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Danh sách địa chỉ</h2>
+    <ul>
+        {% for address in addresses %}
+            <li>{{ address.ward_name }}, {{ address.district_name }}</li>
+        {% empty %}
+            <li>Không tìm thấy địa chỉ phù hợp</li>
+        {% endfor %}
+    </ul>
+    <div class="form-group">
+        <label for="ten-duong">Tên Đường:</label>
+        <input type="text" class="form-control" id="ten-duong" name="ten-duong">
+    </div>
+    <div class="form-group">
+        <label for="source">Nguồn:</label>
+        <select class="form-control" id="source" name="source">
+            <option value="">-- Chọn Nguồn --</option>
+            {% for source in sources %}
+                <option value="{{ source.source_docID }}">{{ source.source_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="street-type">Loại Đường:</label>
+        <select class="form-control" id="street-type" name="street-type">
+            <option value="">-- Chọn Loại Đường --</option>
+            {% for street_type in street_types %}
+                <option value="{{ street_type.type_streetID }}">{{ street_type.type_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="street-group">Nhóm Đường:</label>
+        <select class="form-control" id="street-group" name="street-group">
+            <option value="">-- Chọn Nhóm Đường --</option>
+            {% for street_group in street_groups %}
+                <option value="{{ street_group.group_streetID }}">{{ street_group.group_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="address">Địa Chỉ:</label>
+        <select class="form-control" id="address" name="address">
+            <option value="">-- Chọn Địa Chỉ --</option>
+            {% for address in addresses %}
+                <option value="{{ address.id_address }}">{{ address.ward_name }}, {{ address.district_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
+{% endblock %}
