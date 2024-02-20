@@ -59,9 +59,23 @@
                 <!-- Smaller column -->
                 <h2>Bản Đồ</h2>
 <!--                <p>This is the smaller column.</p>-->
-                <img src="/static/bando.png" alt="Side Image" class="img-fluid">
+<!--                <img src="/static/bando.png" alt="Side Image" class="img-fluid">-->
+                <div id="map" style="height: 400px;"></div>
             </div>
         </div>
     </div>
+    <!-- Thư viện Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        // Khởi tạo Leaflet Map
+        var map = L.map('map').setView([17.4847, 106.6236], 12); // Tọa độ TP.HCM
+
+        // Thêm layer Tile cho bản đồ
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    </script>
 {% endblock %}
 

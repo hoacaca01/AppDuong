@@ -56,8 +56,10 @@ class Street(models.Model):
     group_streetID = models.ForeignKey(StreetGroup, on_delete=models.CASCADE)
     id_address = models.ForeignKey(Address, on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
-    length = models.IntegerField()
-    width = models.IntegerField()
+    # length = models.IntegerField()
+    # width = models.IntegerField()
+    length = models.FloatField()  # Thay đổi IntegerField thành FloatField
+    width = models.FloatField()   # Thay đổi IntegerField thành FloatField
     lane_number = models.IntegerField()
     google_map = models.CharField(max_length=200)
     note = models.CharField(max_length=400)
