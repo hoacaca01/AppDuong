@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-f0^=hrzzj3xcl=%crct#*%+omn+3o1a17hcbz9#!0e3l1elsby
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -52,6 +52,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'NganHangTenDuong.urls'
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES = [
     {

@@ -63,6 +63,8 @@ class Street(models.Model):
     lane_number = models.IntegerField()
     google_map = models.CharField(max_length=200)
     note = models.CharField(max_length=400)
+    image1 = models.ImageField(upload_to='image/', null=True, blank=True)
+    street_mapid = models.CharField(max_length=100, null=True)
 
 class Permission(models.Model):
     active_status = models.BooleanField(default=True)

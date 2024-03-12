@@ -19,19 +19,19 @@
     </style>
     <table>
         <tr>
-            <th>Street Name</th>
-            <th>Abstract</th>
-            <th>Content</th>
-            <th>Source</th>
-            <th>Type</th>
-            <th>Group</th>
-            <th>Address</th>
-            <th>Position</th>
-            <th>Length</th>
-            <th>Width</th>
-            <th>Lane Number</th>
-            <th>Google Map</th>
-            <th>Note</th>
+            <th>Tên Đường</th>
+            <th>Tóm Tắt Tên Đường</th>
+            <th>Nội dung Tên Đường</th>
+            <th>Nguồn Tư Liệu</th>
+            <th>Loại Đường</th>
+            <th>Nhóm Đường</th>
+            <th>Địa Chỉ</th>
+<!--            <th>Position</th>-->
+            <th>Vĩ Độ</th>
+            <th>Kinh Độ</th>
+            <th>Số Làn Đường</th>
+            <th>Bản Đồ</th>
+            <th>Chú Thích</th>
         </tr>
         {% for street in streets %}
         <tr>
@@ -42,12 +42,13 @@
             <td>{{ street.type_streetID.type_name }}</td>
             <td>{{ street.group_streetID.group_name }}</td>
             <td>{{ street.id_address.ward_name }}, {{ street.id_address.district_name }}</td>
-            <td>{{ street.position }}</td>
+<!--            <td>{{ street.position }}</td>-->
             <td>{{ street.length }}</td>
             <td>{{ street.width }}</td>
             <td>{{ street.lane_number }}</td>
             <td><a href="{{ street.google_map }}" target="_blank">Google Map</a></td>
-            <td>{{ street.note }}</td>
+            <td><a href="{{ street.note }}" target="_blank">Thông tin Wikipedia</a></td>
+<!--            <td>{{ street.note }}</td>-->
         </tr>
         {% endfor %}
     </table>

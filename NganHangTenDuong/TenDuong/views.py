@@ -20,7 +20,21 @@ def home(request):
         'addresses': addresses,
     }
     return render(request, 'TenDuong/home.html', context)
+def chitiet(request):
+    streets = Street.objects.all()
+    sources = Source.objects.all()
+    street_types = StreetType.objects.all()
+    street_groups = StreetGroup.objects.all()
+    addresses = Address.objects.all()
 
+    context = {
+        'streets': streets,
+        'sources': sources,
+        'street_types': street_types,
+        'street_groups': street_groups,
+        'addresses': addresses,
+    }
+    return render(request, 'TenDuong/chitiet.html', context)
 @login_required
 def user_profile(request):
     user = request.user
@@ -28,20 +42,20 @@ def user_profile(request):
     context = {'user': user}
     return render(request, 'TenDuong/profile.html', context)
 
-@login_required
+# @login_required
 def street_list(request):
     streets = Street.objects.all()
     context = {'streets': streets}
     return render(request, 'TenDuong/street_list.html', context)
 
-@login_required
+# @login_required
 def street_detail(request, street_id):
     street = get_object_or_404(Street, id=street_id)
     context = {'street': street}
     return render(request, 'TenDuong/street_detail.html', context)
 
 
-@login_required
+# @login_required
 def search(request):
     if request.method == 'POST':
         query_street_name = request.POST.get('ten-duong')
@@ -77,49 +91,49 @@ def search(request):
         }
         return render(request, 'TenDuong/search_results.html', context)
     return render(request, 'TenDuong/home.html')
-@login_required
+# @login_required
 def source_list(request):
     sources = Source.objects.all()
     context = {'sources': sources}
     return render(request, 'TenDuong/source_list.html', context)
 
-@login_required
+# @login_required
 def source_detail(request, source_id):
     source = get_object_or_404(Source, source_docID=source_id)
     context = {'source': source}
     return render(request, 'TenDuong/source_detail.html', context)
 
-@login_required
+# @login_required
 def street_type_list(request):
     street_types = StreetType.objects.all()
     context = {'street_types': street_types}
     return render(request, 'TenDuong/street_type_list.html', context)
 
-@login_required
+# @login_required
 def street_type_detail(request, type_id):
     street_type = get_object_or_404(StreetType, type_streetID=type_id)
     context = {'street_type': street_type}
     return render(request, 'TenDuong/street_type_detail.html', context)
 
-@login_required
+# @login_required
 def street_group_list(request):
     street_groups = StreetGroup.objects.all()
     context = {'street_groups': street_groups}
     return render(request, 'TenDuong/street_group_list.html', context)
 
-@login_required
+# @login_required
 def street_group_detail(request, group_id):
     street_group = get_object_or_404(StreetGroup, group_streetID=group_id)
     context = {'street_group': street_group}
     return render(request, 'TenDuong/street_group_detail.html', context)
 
-@login_required
+# @login_required
 def address_list(request):
     addresses = Address.objects.all()
     context = {'addresses': addresses}
     return render(request, 'TenDuong/address_list.html', context)
 
-@login_required
+# @login_required
 def address_detail(request, address_id):
     address = get_object_or_404(Address, id_address=address_id)
     context = {'address': address}
