@@ -1,17 +1,19 @@
+
+
 {% extends 'TenDuong/base.html' %}
 {% block content %}
     <style>
+        /* Tùy chỉnh kiểu của table */
         table {
             border-collapse: collapse;
+            padding: 8px;
             width: 100%;
         }
-
         th, td {
-            border: 1px solid black;
+            border: 1px solid grey;
             padding: 8px;
             text-align: left;
         }
-
         th {
             background-color: #f2f2f2;
         }
@@ -20,129 +22,148 @@
             height: 300px; /* Giữ tỷ lệ khung hình ảnh */
         }
     </style>
-  <h1>Kết Quả Tìm Kiếm</h1>
-    {% if streets %}
-        {% for street in streets %}
-            <h2>Bản đồ vị trí đường {{ street.street_name }}</h2>
-            <!-- Thẻ div để hiển thị bản đồ -->
-            <div id="{{ street.street_mapid }}" style="height: 400px; width: 100%; margin-top: 20px;"></div>
+    <div class="container">
+        <h1 class="my-4">Kết Quả Tìm Kiếm</h1>
+        {% if streets %}
+            {% for street in streets %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">Bản đồ vị trí đường {{ street.street_name }}</h2>
+                        <div id="{{ street.street_mapid }}" style="height: 400px; width: 100%;"></div>
+                        <!-- Thư viện Leaflet -->
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+                        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                        <script>
+                            // Khởi tạo Leaflet Map
+                            var {{ street.street_mapid }} = L.map('{{ street.street_mapid }}').setView([{{ street.length }}, {{ street.width }}], 16);
 
-            <!-- Thư viện Leaflet -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-            <script>
-                // Khởi tạo Leaflet Map
-                var {{ street.street_mapid }} = L.map('{{ street.street_mapid }}').setView([{{ street.length }}, {{ street.width }}], 16);
+                            // Thêm layer Tile cho bản đồ
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo({{ street.street_mapid }});
 
-                // Thêm layer Tile cho bản đồ
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo({{ street.street_mapid }});
-
-                // Thêm marker cho vị trí
-                L.marker([{{ street.length }}, {{ street.width }}]).addTo({{ street.street_mapid }})
-                    .bindPopup('Đây là đường {{ street.street_name }}')
-                    .openPopup();
-            </script>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Hình Ảnh Đường {{ street.street_name }}</h2>
-            <img class="custom-image" src="{{ street.image1.url }}" alt="{{ street.name }}">
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Thông tin chi tiết đường {{ street.street_name }}</h2>
-            <table>
-                <tr>
-                    <th>Tên Đường</th>
-                    <th>Chú Thích</th>
-                    <th>Tóm Tắt Tên Đường</th>
-                    <th>Nội Dung Tên Đường</th>
-                    <th>Vĩ Độ</th>
-                    <th>Kinh Độ</th>
-                    <th>Số Làn Đường</th>
-                    <th>Link Google Map</th>
-                </tr>
-                <tr>
-<!--                    <td><a href="{{ street.street_name }}" target="_blank">{{ street.street_name }}</a></td>-->
-                    <td>{{ street.street_name }}</td>
-                    <td><a href="{{ street.note }}" target="_blank">Thông tin Wikipedia</a></td>
-                    <td>{{ street.abstract }}</td>
-                    <td>{{ street.content }}</td>
-                    <td>{{ street.length }}</td>
-                    <td>{{ street.width }}</td>
-                    <td>{{ street.lane_number }}</td>
-                    <td><a href="{{ street.google_map }}" target="_blank">Google Map</a></td>
-                </tr>
-            </table>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Thông tin chi tiết nguồn tư liệu {{ street.source_docID.source_name }}</h2>
-            <table>
-                <tr>
-                    <th>Tên Nguồn Tư Liệu</th>
-                    <th>Tóm Tắt Nguồn Tư Liệu</th>
-                    <th>Lịch Sử Nguồn Tư Liệu</th>
-                    <th>Chú Thích Nguồn Tư Liệu</th>
-                </tr>
-                <tr>
-                    <td>{{ street.source_docID.source_name }}</td>
-                    <td>{{ street.source_docID.abstract_source }}</td>
-                    <td>{{ street.source_docID.history }}</td>
-                    <td>{{ street.source_docID.note }}</td>
-                </tr>
-            </table>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Thông tin chi tiết loại đường {{ street.type_streetID.type_name }}</h2>
-            <table>
-                <tr>
-                    <th>Tên Loại Đường</th>
-                    <th>Tóm Tắt Loại Đường</th>
-                    <th>Tài Liệu - Quy Định Loại Đường</th>
-                    <th>Chú Thích Loại Đường</th>
-                </tr>
-                <tr>
-                    <td>{{ street.type_streetID.type_name }}</td>
-                    <td>{{ street.type_streetID.abstract_type }}</td>
-                    <td>{{ street.type_streetID.document_regulation }}</td>
-                    <td>{{ street.type_streetID.note }}</td>
-                </tr>
-            </table>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Thông tin chi tiết Nhóm đường {{ street.group_streetID.group_name }}</h2>
-            <table>
-                <tr>
-                    <th>Tên Nhóm Đường</th>
-                    <th>Số Lượng Thành Viên</th>
-                    <th>Miêu Tả Nhóm Đường</th>
-                    <th>Chú Thích Nhóm Đường</th>
-                </tr>
-                <tr>
-                    <td>{{ street.group_streetID.group_name }}</td>
-                    <td>{{ street.group_streetID.number_member }}</td>
-                    <td>{{ street.group_streetID.description }}</td>
-                    <td>{{ street.group_streetID.note }}</td>
-                </tr>
-            </table>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-            <h2>Thông tin chi tiết địa chỉ </h2>
-            <table>
-                <tr>
-                    <th>Tên Phường</th>
-                    <th>Tên Quận</th>
-                    <th>Khối</th>
-                    <th>Dân Số</th>
-                    <th>Mô Tả Địa Chỉ</th>
-                    <th>Chú Thích Địa Chỉ</th>
-                </tr>
-                <tr>
-                    <td>{{ street.id_address.ward_name }}</td>
-                    <td>{{ street.id_address.district_name }}</td>
-                    <td>{{ street.id_address.square }}</td>
-                    <td>{{ street.id_address.population }}</td>
-                    <td>{{ street.id_address.description }}</td>
-                    <td>{{ street.id_address.note }}</td>
-                </tr>
-            </table>
-            <h2>--------------------------------------------------------------------------------------------------------</h2>
-        {% endfor %}
-    {% else %}
-        <p>Không tìm thấy kết quả phù hợp.</p>
-    {% endif %}
+                            // Thêm marker cho vị trí
+                            L.marker([{{ street.length }}, {{ street.width }}]).addTo({{ street.street_mapid }})
+                                .bindPopup('Đây là đường {{ street.street_name }}')
+                                .openPopup();
+                        </script>
+                        <h2 class="card-title">Hình Ảnh Đường {{ street.street_name }}</h2>
+                        <img class="custom-image" src="{{ street.image1.url }}" alt="{{ street.street_name }}">
+                        <h2 class="card-title">Thông tin chi tiết đường {{ street.street_name }}</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Đường</th>
+                                    <th scope="col">Chú Thích</th>
+                                    <th scope="col">Tóm Tắt Tên Đường</th>
+                                    <th scope="col">Nội Dung Tên Đường</th>
+                                    <th scope="col">Vĩ Độ</th>
+                                    <th scope="col">Kinh Độ</th>
+                                    <th scope="col">Số Làn Đường</th>
+                                    <th scope="col">Link Google Map</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ street.street_name }}</td>
+                                    <td><a href="{{ street.note }}" target="_blank">Thông tin Wikipedia</a></td>
+                                    <td>{{ street.abstract }}</td>
+                                    <td>{{ street.content }}</td>
+                                    <td>{{ street.length }}</td>
+                                    <td>{{ street.width }}</td>
+                                    <td>{{ street.lane_number }}</td>
+                                    <td><a href="{{ street.google_map }}" target="_blank">Google Map</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 class="card-title">Thông tin chi tiết nguồn tư liệu {{ street.source_docID.source_name }}</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Nguồn Tư Liệu</th>
+                                    <th scope="col">Tóm Tắt Nguồn Tư Liệu</th>
+                                    <th scope="col">Lịch Sử Nguồn Tư Liệu</th>
+                                    <th scope="col">Chú Thích Nguồn Tư Liệu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ street.source_docID.source_name }}</td>
+                                    <td>{{ street.source_docID.abstract_source }}</td>
+                                    <td>{{ street.source_docID.history }}</td>
+                                    <td>{{ street.source_docID.note }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 class="card-title">Thông tin chi tiết loại đường {{ street.type_streetID.type_name }}</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Loại Đường</th>
+                                    <th scope="col">Tóm Tắt Loại Đường</th>
+                                    <th scope="col">Tài Liệu - Quy Định Loại Đường</th>
+                                    <th scope="col">Chú Thích Loại Đường</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ street.type_streetID.type_name }}</td>
+                                    <td>{{ street.type_streetID.abstract_type }}</td>
+                                    <td>{{ street.type_streetID.document_regulation }}</td>
+                                    <td>{{ street.type_streetID.note }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 class="card-title">Thông tin chi tiết Nhóm đường {{ street.group_streetID.group_name }}</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Nhóm Đường</th>
+                                    <th scope="col">Số Lượng Thành Viên</th>
+                                    <th scope="col">Miêu Tả Nhóm Đường</th>
+                                    <th scope="col">Chú Thích Nhóm Đường</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ street.group_streetID.group_name }}</td>
+                                    <td>{{ street.group_streetID.number_member }}</td>
+                                    <td>{{ street.group_streetID.description }}</td>
+                                    <td>{{ street.group_streetID.note }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h2 class="card-title">Thông tin chi tiết địa chỉ </h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Phường</th>
+                                    <th scope="col">Tên Quận</th>
+                                    <th scope="col">Khối</th>
+                                    <th scope="col">Dân Số</th>
+                                    <th scope="col">Mô Tả Địa Chỉ</th>
+                                    <th scope="col">Chú Thích Địa Chỉ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ street.id_address.ward_name }}</td>
+                                    <td>{{ street.id_address.district_name }}</td>
+                                    <td>{{ street.id_address.square }}</td>
+                                    <td>{{ street.id_address.population }}</td>
+                                    <td>{{ street.id_address.description }}</td>
+                                    <td>{{ street.id_address.note }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% if user_authenticated %}
+                            <a href="{% url 'TenDuong:edit_search_result' street_name=street.street_name %}" class="btn btn-primary mt-3">Chỉnh sửa thông tin đường {{ street.street_name }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Không tìm thấy kết quả phù hợp.</p>
+        {% endif %}
+    </div>
 {% endblock %}

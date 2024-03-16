@@ -5,8 +5,6 @@
         <div class="row mt-4">
             <div class="col-md-4">
                 <!-- Larger column -->
-<!--                <h2>Main Content</h2>-->
-<!--                <p>This is the larger column.</p>-->
                 <form class="col-mt-4" method="POST" action="{% url 'TenDuong:search' %}">
                     {% csrf_token %}
                     <h3>Tra Cứu</h3>
@@ -21,8 +19,6 @@
                             {% for source in sources %}
                                 <option value="{{ source.source_docID }}">{{ source.source_name }}</option>
                             {% endfor %}
-<!--                            <option value="DOC001">Văn phòng Ghi chép Thành phố</option>-->
-<!--                            <option value="DOC002">Sổ tài liệu lịch sử</option>-->
                         </select>
                     </div>
                     <div class="form-group">
@@ -58,8 +54,6 @@
             <div class="col-md-8">
                 <!-- Smaller column -->
                 <h2>Bản Đồ</h2>
-<!--                <p>This is the smaller column.</p>-->
-<!--                <img src="/static/bando.png" alt="Side Image" class="img-fluid">-->
                 <div id="map" style="height: 400px;"></div>
             </div>
         </div>
@@ -78,4 +72,3 @@
         }).addTo(map);
     </script>
 {% endblock %}
-

@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import User, Street, Source, StreetType, StreetGroup, Address, Permission
+from .models import Street, Source, StreetType, StreetGroup, Address, Permission, UserProfile
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'full_name', 'email', 'usertype', 'active_status')
-    list_filter = ('usertype', 'active_status')
-    search_fields = ('username', 'full_name', 'email')
+# @admin.register(User)
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('username', 'full_name', 'email', 'usertype', 'active_status')
+#     list_filter = ('usertype', 'active_status')
+#     search_fields = ('username', 'full_name', 'email')
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
     list_display = ('source_name', 'source_docID')
@@ -35,3 +35,5 @@ class PermissionAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'active_status', 'created_at')
     list_filter = ('role', 'active_status')
     search_fields = ('user__username', 'role')
+
+admin.site.register(UserProfile)

@@ -1,20 +1,76 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
+from django import forms
 
-class User(models.Model):
-    full_name = models.CharField(max_length=250)
-    username = models.CharField(max_length=250)
-    password = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    position = models.CharField(max_length=150)
-    email = models.CharField(max_length=150)
-    phone = models.CharField(max_length=20)
-    usertype = models.CharField(max_length=200)
-    active_status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    language = models.CharField(max_length=200)
-    style_id = models.IntegerField()
-    verified = models.CharField(max_length=200)
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+
+    def clean_username(self):
+        # Kiểm tra tính duy nhất của tên người dùng
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('Tên người dùng đã tồn tại.')
+        return username
+
+    def clean_email(self):
+        # Kiểm tra tính duy nhất của địa chỉ email
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email đã tồn tại.')
+        return email
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     password1 = cleaned_data.get("password1")
+    #     password2 = cleaned_data.get("password2")
+    #
+    #     if password1 != password2:
+    #         raise forms.ValidationError("Mật khẩu và Mật khẩu xác nhận không khớp.")
+    def clean_password2(self):
+        # Kiểm tra tính hợp lệ của "Mật khẩu xác nhận"
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Mật khẩu và Mật khẩu xác nhận không khớp.")
+        return password2
+
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         UserProfile.objects.create(user=instance)
+#         # Kiểm tra xem avatar đã được thiết lập hay chưa
+#         if not UserProfile.avatar:
+#             # Đặt avatar bằng hình ảnh mặc định
+#             UserProfile.avatar = settings.MEDIA_URL + 'avatars/ava.jpg'
+#             UserProfile.save()
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = UserProfile.objects.create(user=instance)
+        # Kiểm tra xem avatar đã được thiết lập hay chưa
+        if not user_profile.avatar:
+            # Đặt avatar bằng hình ảnh mặc định
+            user_profile.avatar = 'avatars/ava.jpg'
+            user_profile.save()
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    birthdate = models.DateField(null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Source(models.Model):
     source_docID = models.CharField(max_length=10, primary_key=True)

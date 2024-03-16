@@ -24,9 +24,28 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'TenDuong:street_list' %}">DANH SÁCH TÊN DƯỜNG</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'TenDuong:user_profile' %}">THÔNG TIN CÁ NHÂN</a>
-                </li>
+                <div style="width: 600px;"></div>
+                {% if user_authenticated %}
+                    <div style="width: 75px;"></div>
+                    <li class="nav-item dropdown mr-10 active">
+                        <a class="nav-link dropdown-toggle " href="#" role="button" data-toggle="dropdown" aria-expanded="false"> Xin Chào {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="{% url 'TenDuong:profile' %}">Hồ sơ cá nhân</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{% url 'TenDuong:logout' %}">Đăng Xuất</a>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if not user_authenticated %}
+                    <!-- Hiển thị nút đăng ký và đăng nhập nếu người dùng chưa đăng nhập -->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="{% url 'TenDuong:register' %}">Đăng Ký</a>-->
+<!--                    </li>-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'TenDuong:login' %}">Đăng Nhập</a>
+                    </li>
+                {% endif %}
             </ul>
 <!--            <form class="form-inline my-2 my-lg-0" method="POST">-->
 <!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="address" aria-label="Search">-->

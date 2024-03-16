@@ -1,55 +1,47 @@
 {% extends 'TenDuong/base.html' %}
 {% block content %}
-    <h1>DANH SÁCH TÊN ĐƯỜNG</h1>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-    <table>
-        <tr>
-            <th>Tên Đường</th>
-            <th>Tóm Tắt Tên Đường</th>
-            <th>Nội dung Tên Đường</th>
-            <th>Nguồn Tư Liệu</th>
-            <th>Loại Đường</th>
-            <th>Nhóm Đường</th>
-            <th>Địa Chỉ</th>
-<!--            <th>Position</th>-->
-            <th>Vĩ Độ</th>
-            <th>Kinh Độ</th>
-            <th>Số Làn Đường</th>
-            <th>Bản Đồ</th>
-            <th>Chú Thích</th>
-        </tr>
-        {% for street in streets %}
-        <tr>
-            <td>{{ street.street_name }}</td>
-            <td>{{ street.abstract }}</td>
-            <td>{{ street.content }}</td>
-            <td>{{ street.source_docID.source_name }}</td>
-            <td>{{ street.type_streetID.type_name }}</td>
-            <td>{{ street.group_streetID.group_name }}</td>
-            <td>{{ street.id_address.ward_name }}, {{ street.id_address.district_name }}</td>
-<!--            <td>{{ street.position }}</td>-->
-            <td>{{ street.length }}</td>
-            <td>{{ street.width }}</td>
-            <td>{{ street.lane_number }}</td>
-            <td><a href="{{ street.google_map }}" target="_blank">Google Map</a></td>
-            <td><a href="{{ street.note }}" target="_blank">Thông tin Wikipedia</a></td>
-<!--            <td>{{ street.note }}</td>-->
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h1 class="my-4">DANH SÁCH TÊN ĐƯỜNG</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Tên Đường</th>
+                        <th>Tóm Tắt Tên Đường</th>
+                        <th>Nội dung Tên Đường</th>
+                        <th>Nguồn Tư Liệu</th>
+                        <th>Loại Đường</th>
+                        <th>Nhóm Đường</th>
+                        <th>Địa Chỉ</th>
+                        <th>Vĩ Độ</th>
+                        <th>Kinh Độ</th>
+                        <th>Số Làn Đường</th>
+                        <th>Bản Đồ</th>
+                        <th>Chú Thích</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for street in streets %}
+                    <tr>
+                        <td>{{ street.street_name }}</td>
+                        <td>{{ street.abstract }}</td>
+                        <td>{{ street.content }}</td>
+                        <td>{{ street.source_docID.source_name }}</td>
+                        <td>{{ street.type_streetID.type_name }}</td>
+                        <td>{{ street.group_streetID.group_name }}</td>
+                        <td>{{ street.id_address.ward_name }}, {{ street.id_address.district_name }}</td>
+                        <td>{{ street.length }}</td>
+                        <td>{{ street.width }}</td>
+                        <td>{{ street.lane_number }}</td>
+                        <td><a href="{{ street.google_map }}" target="_blank" class="btn btn-primary">Google Map</a></td>
+                        <td><a href="{{ street.note }}" target="_blank" class="btn btn-info">Thông tin Wikipedia</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if user_authenticated %}
+            <a href="{% url 'TenDuong:edit_allStreet' %}" class="btn btn-success">Chỉnh sửa thông tin</a>
+        {% endif %}
+    </div>
 {% endblock %}
